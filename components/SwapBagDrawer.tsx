@@ -12,7 +12,8 @@ export default function SwapBagDrawer() {
     clearBag,
     currentUser,
     checkoutSwap,
-    setIsListItemOpen
+    setIsListItemOpen,
+    setIsChatOpen
   } = useApp();
 
   const [address, setAddress] = useState(currentUser.location + ' - Hub Drop');
@@ -95,13 +96,25 @@ export default function SwapBagDrawer() {
         {/* Feedback Banner */}
         {feedback && (
           <div
-            className={`p-3 rounded-xl text-xs font-medium my-2 ${
+            className={`p-3.5 rounded-xl text-xs font-medium my-2 ${
               feedback.isError
                 ? 'bg-rose-100 text-rose-800 border border-rose-200'
                 : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
             }`}
           >
-            {feedback.message}
+            <p>{feedback.message}</p>
+            {!feedback.isError && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsBagOpen(false);
+                  setIsChatOpen(true);
+                }}
+                className="mt-2.5 inline-flex items-center gap-1.5 bg-[var(--deep)] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full hover:bg-[var(--fuchsia)] transition shadow-xs"
+              >
+                💬 Open Chat to Arrange Meetup →
+              </button>
+            )}
           </div>
         )}
 

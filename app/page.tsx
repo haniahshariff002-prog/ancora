@@ -10,6 +10,7 @@ import SwapBagDrawer from '../components/SwapBagDrawer';
 import ProfileModal from '../components/ProfileModal';
 import ListItemModal from '../components/ListItemModal';
 import AdminDashboard from '../components/AdminDashboard';
+import SwapChatModal from '../components/SwapChatModal';
 import HowItWorks from '../components/HowItWorks';
 import WaitlistSection from '../components/WaitlistSection';
 import Footer from '../components/Footer';
@@ -117,6 +118,7 @@ export default function Home() {
       <ProfileModal />
       <ListItemModal />
       <AdminDashboard />
+      <SwapChatModal />
     </main>
   );
 }

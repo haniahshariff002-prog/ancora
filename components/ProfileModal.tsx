@@ -15,7 +15,9 @@ export default function ProfileModal() {
     creditHistory,
     reviews,
     setIsListItemOpen,
-    setIsAdminOpen
+    setIsAdminOpen,
+    openChatForSwap,
+    setIsChatOpen
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<'credits' | 'closet' | 'swaps' | 'reviews'>('credits');
@@ -308,13 +310,29 @@ export default function ProfileModal() {
                       )}
                     </div>
 
-                    <div className="pt-2 border-t border-gray-100 flex justify-between items-center text-xs">
+                    <div className="pt-2 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
                       <span className="text-[11px] text-[var(--ink)]">
                         {s.items.map((i) => i.name).join(', ')}
                       </span>
-                      <strong className="text-[var(--fuchsia)] whitespace-nowrap">
-                        {s.totalCredits} credits
-                      </strong>
+                      <div className="flex items-center gap-3 self-end sm:self-auto">
+                        <strong className="text-[var(--fuchsia)] whitespace-nowrap">
+                          {s.totalCredits} credits
+                        </strong>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsProfileOpen(false);
+                            if (s.items[0]) {
+                              openChatForSwap(s.items[0], s.id);
+                            } else {
+                              setIsChatOpen(true);
+                            }
+                          }}
+                          className="bg-[var(--deep)] hover:bg-[var(--fuchsia)] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full transition shadow-xs"
+                        >
+                          💬 Chat / Meetup
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))

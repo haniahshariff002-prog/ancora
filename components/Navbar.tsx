@@ -15,7 +15,9 @@ export default function Navbar() {
     setIsProfileOpen,
     setIsListItemOpen,
     isAdminOpen,
-    setIsAdminOpen
+    setIsAdminOpen,
+    setIsChatOpen,
+    conversations
   } = useApp();
 
   const categories = [
@@ -103,6 +105,21 @@ export default function Navbar() {
               <span className="bg-[var(--fuchsia)] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                 {currentUser.credits} cr
               </span>
+            </button>
+
+            {/* Swap Chat Button */}
+            <button
+              onClick={() => setIsChatOpen(true)}
+              className="relative bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5"
+              title="Open Swap Meetup & Courier Chat"
+            >
+              <span>💬</span>
+              <span className="hidden sm:inline text-[11px] uppercase tracking-wider">Chat</span>
+              {conversations.length > 0 && (
+                <span className="bg-[var(--fuchsia)] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {conversations.length}
+                </span>
+              )}
             </button>
 
             {/* Swap Bag (Cart) Button */}

@@ -4,7 +4,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function ProductModal() {
-  const { selectedItem, setSelectedItem, addToBag, bag, currentUser, reviews } = useApp();
+  const { selectedItem, setSelectedItem, addToBag, bag, currentUser, reviews, openChatForSwap } = useApp();
 
   if (!selectedItem) return null;
 
@@ -137,20 +137,33 @@ export default function ProductModal() {
               </div>
 
               {!isSwapped ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    addToBag(selectedItem);
-                    setSelectedItem(null);
-                  }}
-                  className={`w-full py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition shadow-md ${
-                    isInBag
-                      ? 'bg-white text-[var(--fuchsia)] border border-[var(--fuchsia)]'
-                      : 'bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white'
-                  }`}
-                >
-                  {isInBag ? 'Already in Bag ✓' : `Add to Swap Bag (${selectedItem.credits} cr)`}
-                </button>
+                <div className="flex gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openChatForSwap(selectedItem);
+                      setSelectedItem(null);
+                    }}
+                    className="bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-4 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-xs whitespace-nowrap"
+                    title="Coordinate meetup or ask about fit"
+                  >
+                    💬 Chat
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToBag(selectedItem);
+                      setSelectedItem(null);
+                    }}
+                    className={`flex-1 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition shadow-md ${
+                      isInBag
+                        ? 'bg-white text-[var(--fuchsia)] border border-[var(--fuchsia)]'
+                        : 'bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white'
+                    }`}
+                  >
+                    {isInBag ? 'In Bag ✓' : `Add to Swap Bag (${selectedItem.credits} cr)`}
+                  </button>
+                </div>
               ) : (
                 <button
                   disabled
