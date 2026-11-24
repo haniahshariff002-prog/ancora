@@ -29,7 +29,7 @@ export default function Hero() {
               href="#explore"
               className="inline-flex items-center justify-center bg-[var(--fuchsia)] text-white border border-[var(--fuchsia)] rounded-full px-6 py-3.5 text-[11px] font-bold tracking-[0.12em] uppercase transition hover:bg-[var(--deep)] hover:-translate-y-0.5"
             >
-              Explore 100+ Pieces
+              Swap fits now
             </a>
             <button
               onClick={() => setIsListItemOpen(true)}
