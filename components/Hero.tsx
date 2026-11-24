@@ -17,7 +17,7 @@ export default function Hero() {
 
           <h1 className="font-serif font-bold tracking-[-0.045em] leading-[0.91] text-[clamp(65px,9.5vw,140px)] my-5 md:my-7 text-[var(--fuchsia)]">
             Wear. Swap.<br />
-            <em className="font-bold italic">Repeat.</em>
+            Repeat.
           </h1>
 
           <p className="max-w-[420px] text-sm md:text-base leading-[1.75] text-[var(--ink)] font-normal">
