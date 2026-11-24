@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Swap your unworn favorites for verified fits across Milan and Italy with zero cash required.',
   openGraph: {
     title: 'ancora. — Wear. Swap. Repeat.',
-    description: 'Unlock the real value hanging in your closet. Exchange unworn pieces for credits with zero cash required.',
+    description: 'Exchange unworn pieces for credits, and refresh your wardrobe with verified fits across Milan—without spending a single euro.',
     images: ['https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1200&auto=format&fit=crop&q=85']
   }
 };
