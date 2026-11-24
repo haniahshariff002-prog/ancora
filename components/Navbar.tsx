@@ -1,9 +1,12 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const {
     activeCat,
     setActiveCat,
@@ -17,8 +20,14 @@ export default function Navbar() {
     isAdminOpen,
     setIsAdminOpen,
     setIsChatOpen,
-    conversations
+    conversations,
+    savedItemIds,
+    items
   } = useApp();
+
+  const chiaraListedCount = items.filter(
+    (i) => i.lenderId === currentUser.id || i.lenderName.toLowerCase().includes('chiara')
+  ).length;
 
   const categories = [
     { label: 'Discover all', value: 'All' },
@@ -28,6 +37,13 @@ export default function Navbar() {
     { label: 'Accessories', value: 'Accessories' },
     { label: 'Books', value: 'Books' },
     { label: 'Home', value: 'Household' }
+  ];
+
+  const navLinks = [
+    { href: '/', label: 'Explore', badge: null },
+    { href: '/closet', label: "Chiara's Closet", badge: chiaraListedCount },
+    { href: '/community', label: 'Community', badge: null },
+    { href: '/coordination', label: 'Interested & Chat', badge: savedItemIds.length }
   ];
 
   return (
@@ -46,14 +62,14 @@ export default function Navbar() {
 
       {/* Main Sticky Header */}
       <header className="sticky top-0 z-40 bg-[#e2ebd9]/95 backdrop-blur-md border-b border-[#c21870]/20">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4 md:gap-7 px-[5%] py-4">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4 md:gap-7 px-[5%] py-3 md:py-4">
           {/* Logo */}
-          <a href="#top" className="font-serif text-3xl md:text-5xl font-bold tracking-[-0.06em] text-[var(--fuchsia)] flex items-center">
+          <Link href="/" className="font-serif text-3xl md:text-5xl font-bold tracking-[-0.06em] text-[var(--fuchsia)] flex items-center">
             ancora<span className="text-[#c98da7]">.</span>
-          </a>
+          </Link>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-[500px] relative hidden sm:block">
+          <div className="flex-1 max-w-[420px] relative hidden lg:block">
             <svg
               className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 stroke-[var(--fuchsia)] fill-none stroke-2 pointer-events-none"
               viewBox="0 0 24 24"
@@ -66,7 +82,7 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search 100+ fits, blazers, denim, silk..."
-              className="w-full bg-white border border-[#c8d5c4] rounded-full py-2.5 pl-11 pr-4 text-xs md:text-sm text-[var(--deep)] outline-none transition focus:ring-2 focus:ring-[#c98da7]/50"
+              className="w-full bg-white border border-[#c8d5c4] rounded-full py-2 pl-11 pr-4 text-xs md:text-sm text-[var(--deep)] outline-none transition focus:ring-2 focus:ring-[#c98da7]/50"
             />
             {searchQuery && (
               <button
@@ -79,11 +95,11 @@ export default function Navbar() {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-2 md:gap-4 text-xs font-bold">
+          <div className="flex items-center gap-2 md:gap-3 text-xs font-bold">
             {/* List Item CTA */}
             <button
               onClick={() => setIsListItemOpen(true)}
-              className="hidden lg:inline-flex items-center gap-1.5 border border-[var(--fuchsia)] text-[var(--fuchsia)] hover:bg-[var(--fuchsia)] hover:text-white px-3.5 py-2 rounded-full text-[10px] tracking-widest uppercase transition"
+              className="hidden sm:inline-flex items-center gap-1.5 border border-[var(--fuchsia)] text-[var(--fuchsia)] hover:bg-[var(--fuchsia)] hover:text-white px-3 py-1.5 rounded-full text-[10px] tracking-widest uppercase transition"
             >
               <span>+</span> List Piece
             </button>
@@ -125,7 +141,7 @@ export default function Navbar() {
             {/* Swap Bag (Cart) Button */}
             <button
               onClick={() => setIsBagOpen(true)}
-              className="relative bg-[var(--fuchsia)] text-white border border-[var(--fuchsia)] hover:bg-[var(--deep)] px-3.5 py-2 rounded-full text-[11px] font-bold tracking-[0.1em] uppercase transition flex items-center gap-1.5"
+              className="relative bg-[var(--fuchsia)] text-white border border-[var(--fuchsia)] hover:bg-[var(--deep)] px-3.5 py-1.5 rounded-full text-[11px] font-bold tracking-[0.1em] uppercase transition flex items-center gap-1.5"
             >
               <span>Bag</span>
               {bag.length > 0 && (
@@ -137,47 +153,63 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Search Bar (under header for small screens) */}
-        <div className="px-[5%] pb-3 sm:hidden">
-          <div className="relative">
-            <svg
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 stroke-[var(--fuchsia)] fill-none stroke-2 pointer-events-none"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="10.5" cy="10.5" r="6.5" />
-              <path d="m16 16 5 5" />
-            </svg>
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search fits, blazers, items..."
-              className="w-full bg-white border border-[#c8d5c4] rounded-full py-2 pl-9 pr-3 text-xs text-[var(--deep)] outline-none"
-            />
+        {/* Primary Streamlined Page Navigation Tabs */}
+        <div className="border-t border-[#c21870]/15 bg-[#dbe6d1]/50 px-[5%] py-2">
+          <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+            <nav className="flex items-center gap-2 sm:gap-4 shrink-0">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-xs uppercase tracking-wider px-3 py-1 rounded-full transition flex items-center gap-1.5 whitespace-nowrap ${
+                      isActive
+                        ? 'bg-[var(--fuchsia)] text-white font-bold shadow-xs'
+                        : 'text-[var(--deep)] hover:bg-white/70 font-medium'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {link.badge !== null && link.badge > 0 && (
+                      <span
+                        className={`text-[9px] font-black px-1.5 py-0.2 rounded-full ${
+                          isActive ? 'bg-white text-[var(--fuchsia)]' : 'bg-[var(--fuchsia)] text-white'
+                        }`}
+                      >
+                        {link.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Category pills shortcut when on home page */}
+            {pathname === '/' && (
+              <div className="hidden md:flex items-center gap-2 shrink-0">
+                <span className="text-[10px] uppercase tracking-widest text-[var(--ink)]/70">Category:</span>
+                {categories.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    onClick={() => {
+                      setActiveCat(c.value);
+                      const el = document.getElementById('explore');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`text-[10px] uppercase px-2 py-0.5 rounded-full transition ${
+                      activeCat === c.value
+                        ? 'bg-[var(--deep)] text-white font-bold'
+                        : 'text-[var(--ink)] hover:text-[var(--fuchsia)]'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Category Filter Pills */}
-        <nav className="flex justify-start md:justify-center gap-4 md:gap-7 px-4 pb-3 overflow-x-auto no-scrollbar border-t border-[#c21870]/10 pt-2">
-          {categories.map((c) => (
-            <button
-              key={c.value}
-              type="button"
-              onClick={() => {
-                setActiveCat(c.value);
-                const el = document.getElementById('explore');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={`text-[11px] tracking-[0.14em] uppercase py-1 px-1 whitespace-nowrap transition border-b-2 ${
-                activeCat === c.value
-                  ? 'border-[var(--fuchsia)] text-[var(--fuchsia)] font-bold'
-                  : 'border-transparent text-[var(--ink)] hover:text-[var(--fuchsia)]'
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
-        </nav>
       </header>
     </>
   );

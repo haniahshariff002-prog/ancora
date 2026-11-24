@@ -5,9 +5,10 @@ import { FashionItem } from '../data/items';
 import { useApp } from '../context/AppContext';
 
 export default function ProductCard({ item }: { item: FashionItem }) {
-  const { setSelectedItem, addToBag, bag } = useApp();
+  const { setSelectedItem, addToBag, bag, isItemSaved, toggleSaveItem } = useApp();
   const isInBag = bag.some((b) => b.id === item.id);
   const isSwapped = item.status === 'swapped';
+  const isSaved = isItemSaved(item.id);
 
   return (
     <article
@@ -35,6 +36,32 @@ export default function ProductCard({ item }: { item: FashionItem }) {
             </span>
           )}
         </div>
+
+        {/* Save / Heart Button */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleSaveItem(item.id);
+          }}
+          title={isSaved ? 'Remove from saved' : 'Save & coordinate'}
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm shadow flex items-center justify-center transition-all hover:scale-110"
+        >
+          <svg
+            className={`w-4 h-4 transition-colors ${
+              isSaved ? 'text-[var(--fuchsia)] fill-[var(--fuchsia)]' : 'text-[var(--ink)] fill-transparent'
+            }`}
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
 
         {/* Condition Tag */}
         <div className="absolute bottom-2.5 left-2.5">

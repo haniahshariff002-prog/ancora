@@ -4,13 +4,14 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function ProductModal() {
-  const { selectedItem, setSelectedItem, addToBag, bag, currentUser, reviews, openChatForSwap } = useApp();
+  const { selectedItem, setSelectedItem, addToBag, bag, currentUser, reviews, openChatForSwap, isItemSaved, toggleSaveItem } = useApp();
 
   if (!selectedItem) return null;
 
   const isInBag = bag.some((b) => b.id === selectedItem.id);
   const isSwapped = selectedItem.status === 'swapped';
   const lenderReviews = reviews[selectedItem.lenderId] || [];
+  const isSaved = isItemSaved(selectedItem.id);
 
   return (
     <div
@@ -21,13 +22,36 @@ export default function ProductModal() {
         className="relative bg-[var(--sage)] w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border border-[#c8d5c4] my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
-        <button
-          onClick={() => setSelectedItem(null)}
-          className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white text-[var(--deep)] w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition"
-        >
-          ✕
-        </button>
+        {/* Top Action Buttons */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => toggleSaveItem(selectedItem.id)}
+            title={isSaved ? 'Remove from saved' : 'Save for coordination'}
+            className="bg-white/90 hover:bg-white text-[var(--deep)] w-8 h-8 rounded-full flex items-center justify-center shadow-md transition"
+          >
+            <svg
+              className={`w-4 h-4 transition-colors ${
+                isSaved ? 'text-[var(--fuchsia)] fill-[var(--fuchsia)]' : 'text-[var(--ink)] fill-transparent'
+              }`}
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => setSelectedItem(null)}
+            className="bg-white/90 hover:bg-white text-[var(--deep)] w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition"
+          >
+            ✕
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Column: Image */}

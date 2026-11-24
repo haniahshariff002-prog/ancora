@@ -62,6 +62,7 @@ interface AppContextType {
   reviews: Record<string, UserReview[]>;
   conversations: SwapConversation[];
   activeConversation: SwapConversation | null;
+  savedItemIds: string[];
   activeCat: string;
   searchQuery: string;
   selectedItem: FashionItem | null;
@@ -79,6 +80,8 @@ interface AppContextType {
   setIsAdminOpen: (open: boolean) => void;
   setIsChatOpen: (open: boolean) => void;
   setActiveConversation: (conv: SwapConversation | null) => void;
+  toggleSaveItem: (itemId: string) => void;
+  isItemSaved: (itemId: string) => boolean;
   openChatForSwap: (item: FashionItem, swapId?: string) => void;
   sendChatMessage: (conversationId: string, text: string) => void;
   addToBag: (item: FashionItem) => { success: boolean; message: string };
@@ -180,6 +183,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   ]);
   const [activeConversation, setActiveConversation] = useState<SwapConversation | null>(null);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [savedItemIds, setSavedItemIds] = useState<string[]>(['w-2', 'm-1', 'a-1']);
 
   const [activeCat, setActiveCat] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -213,6 +217,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const savedConvs = localStorage.getItem('ancora_conversations');
       if (savedConvs) setConversations(JSON.parse(savedConvs));
+
+      const savedLikes = localStorage.getItem('ancora_saved');
+      if (savedLikes) setSavedItemIds(JSON.parse(savedLikes));
     } catch (e) {
       console.warn('LocalStorage unavailable or empty');
     }
@@ -224,7 +231,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     newBag = bag,
     newSwaps = swaps,
     newHistory = creditHistory,
-    newConvs = conversations
+    newConvs = conversations,
+    newSaved = savedItemIds
   ) => {
     try {
       localStorage.setItem('ancora_items', JSON.stringify(newItems));
@@ -233,10 +241,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem('ancora_swaps', JSON.stringify(newSwaps));
       localStorage.setItem('ancora_history', JSON.stringify(newHistory));
       localStorage.setItem('ancora_conversations', JSON.stringify(newConvs));
+      localStorage.setItem('ancora_saved', JSON.stringify(newSaved));
     } catch (e) {
       // Ignore
     }
   };
+
+  const toggleSaveItem = (itemId: string) => {
+    setSavedItemIds((prev) => {
+      const updated = prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId];
+      persistState(items, users, bag, swaps, creditHistory, conversations, updated);
+      return updated;
+    });
+  };
+
+  const isItemSaved = (itemId: string) => savedItemIds.includes(itemId);
 
   const switchUser = (userId: string) => {
     const target = users.find((u) => u.id === userId);
@@ -569,6 +588,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         reviews,
         conversations,
         activeConversation,
+        savedItemIds,
         activeCat,
         searchQuery,
         selectedItem,
@@ -586,6 +606,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsAdminOpen,
         setIsChatOpen,
         setActiveConversation,
+        toggleSaveItem,
+        isItemSaved,
         openChatForSwap,
         sendChatMessage,
         addToBag,
