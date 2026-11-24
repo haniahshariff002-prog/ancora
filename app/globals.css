@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sage: #e3eddf;
+  --sage2: #f0f5ed;
+  --pink: #f5e9e9;
+  --fuchsia: #9c315f;
+  --deep: #762445;
+  --white: #fffdfb;
+  --ink: #4d5550;
+}
+
+body {
+  margin: 0;
+  background-color: var(--sage);
+  color: var(--fuchsia);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Custom scrollbar styling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+  }
+}
