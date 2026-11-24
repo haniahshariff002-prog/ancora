@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function ListItemModal() {
@@ -13,26 +13,95 @@ export default function ListItemModal() {
   const [size, setSize] = useState('M');
   const [condition, setCondition] = useState('Like new');
   const [credits, setCredits] = useState(40);
-  const [description, setDescription] = useState('');
-  const [img, setImg] = useState('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800&auto=format&fit=crop&q=80');
+  const [img, setImg] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   if (!isListItemOpen) return null;
+
+  // Process and optimize image directly on client side (like an e-commerce platform)
+  const processImageFile = (file: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+
+    setIsProcessing(true);
+    setFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+
+      // Create an image element to compress/standardize dimensions
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1200;
+        const scale = Math.min(1, MAX_WIDTH / image.width);
+        canvas.width = image.width * scale;
+        canvas.height = image.height * scale;
+
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          // Export high-quality jpeg data URL
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+          setImg(compressedDataUrl);
+        } else {
+          setImg(result);
+        }
+        setIsProcessing(false);
+      };
+      image.src = result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processImageFile(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processImageFile(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
+    const finalImage =
+      img ||
+      'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800&auto=format&fit=crop&q=80';
+
     addNewItem({
       name,
       category,
       subCategory,
-      brand: brand || 'Contemporary Vintage',
+      brand: brand || 'Contemporary Milan',
       size,
       condition,
       credits: Number(credits) || 35,
-      description: description || 'Beautifully cared for wardrobe piece, ready for its next owner.',
-      img
+      description: `${brand || 'Contemporary'} ${name} in ${condition.toLowerCase()}. Size ${size}. Cleaned and ready for swap.`,
+      img: finalImage
     });
 
     setSubmitted(true);
@@ -40,17 +109,10 @@ export default function ListItemModal() {
       setSubmitted(false);
       setIsListItemOpen(false);
       setName('');
-      setDescription('');
+      setImg('');
+      setFileName('');
     }, 1800);
   };
-
-  const sampleImages = [
-    { label: 'Blazer', url: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800&auto=format&fit=crop&q=80' },
-    { label: 'Dress', url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80' },
-    { label: 'Knitwear', url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop&q=80' },
-    { label: 'Men Jacket', url: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&auto=format&fit=crop&q=80' },
-    { label: 'Leather Bag', url: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=80' }
-  ];
 
   return (
     <div
@@ -87,7 +149,7 @@ export default function ListItemModal() {
                 Lender Studio · List A Wardrobe Piece
               </span>
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-[var(--deep)]">
-                Give your unworn clothes currency.
+                Post a piece to the exchange.
               </h2>
               <p className="text-xs text-[var(--ink)] mt-1">
                 Lister: <strong>{currentUser.name}</strong> ({currentUser.location})
@@ -95,6 +157,91 @@ export default function ListItemModal() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+              {/* Product Photo Direct File Upload Zone */}
+              <div>
+                <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
+                  Product Photo *
+                </label>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
+                {img ? (
+                  <div className="relative bg-white rounded-xl p-3 border border-[#c8d5c4] flex items-center gap-4">
+                    <img
+                      src={img}
+                      alt="Uploaded preview"
+                      className="w-20 h-24 object-cover rounded-lg bg-[var(--pink)] border border-[#c8d5c4]/60"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] mb-0.5">
+                        <span>✓</span> Photo processed & ready
+                      </div>
+                      <p className="text-[11px] text-[var(--ink)] truncate">
+                        {fileName || 'product-image.jpg'}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="mt-2 text-[10px] uppercase tracking-wider font-bold text-[var(--fuchsia)] hover:underline"
+                      >
+                        Replace Photo
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImg('');
+                        setFileName('');
+                      }}
+                      className="text-gray-400 hover:text-rose-600 p-2 text-sm"
+                      title="Remove image"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
+                      isDragOver
+                        ? 'border-[var(--fuchsia)] bg-[#f5e9e9]/50'
+                        : 'border-[#c8d5c4] bg-white/70 hover:bg-white hover:border-[var(--fuchsia)]'
+                    }`}
+                  >
+                    {isProcessing ? (
+                      <div className="py-2">
+                        <div className="inline-block animate-spin text-xl mb-1">⏳</div>
+                        <p className="text-xs font-bold text-[var(--deep)]">
+                          Processing & optimizing photo...
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-10 h-10 rounded-full bg-[#f5e9e9] text-[var(--fuchsia)] flex items-center justify-center mx-auto mb-2 text-lg">
+                          📷
+                        </div>
+                        <p className="text-xs font-bold text-[var(--deep)]">
+                          Drop your garment photo here, or <span className="text-[var(--fuchsia)] underline">browse</span>
+                        </p>
+                        <p className="text-[10px] text-[var(--ink)] mt-1">
+                          PNG, JPG, or WEBP up to 10MB · Automatically optimized
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Item Title */}
               <div>
                 <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
                   Item Title *
@@ -109,6 +256,7 @@ export default function ListItemModal() {
                 />
               </div>
 
+              {/* Category & Brand */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
@@ -142,6 +290,7 @@ export default function ListItemModal() {
                 </div>
               </div>
 
+              {/* Size, Condition, Credits */}
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
@@ -187,45 +336,7 @@ export default function ListItemModal() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
-                  Photo URL
-                </label>
-                <input
-                  type="url"
-                  value={img}
-                  onChange={(e) => setImg(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full bg-white border border-[#c8d5c4] rounded-lg px-3 py-2 text-xs text-[var(--deep)] outline-none"
-                />
-                <div className="flex gap-2 items-center mt-1.5 overflow-x-auto">
-                  <span className="text-[10px] text-gray-500 whitespace-nowrap">Presets:</span>
-                  {sampleImages.map((s) => (
-                    <button
-                      key={s.label}
-                      type="button"
-                      onClick={() => setImg(s.url)}
-                      className="text-[10px] bg-white border border-gray-200 px-2 py-0.5 rounded-full hover:border-[var(--fuchsia)] whitespace-nowrap"
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
-                  Editorial Story / Details
-                </label>
-                <textarea
-                  rows={3}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Tell its story: fabric quality, fit, care instructions..."
-                  className="w-full bg-white border border-[#c8d5c4] rounded-lg px-3 py-2 text-xs text-[var(--deep)] outline-none focus:border-[var(--fuchsia)]"
-                />
-              </div>
-
+              {/* Submit CTA */}
               <div className="pt-2">
                 <button
                   type="submit"
