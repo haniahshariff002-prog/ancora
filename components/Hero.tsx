@@ -17,25 +17,19 @@ export default function Hero() {
 
           <h1 className="font-serif font-bold tracking-[-0.045em] leading-[0.91] text-[clamp(65px,9.5vw,140px)] my-5 md:my-7 text-[var(--fuchsia)]">
             Wear. Swap.<br />
-            Repeat.
+            <em className="font-medium italic">Repeat.</em>
           </h1>
 
           <p className="max-w-[420px] text-sm md:text-base leading-[1.75] text-[var(--ink)] font-normal">
             Exchange unworn pieces for credits, and refresh your wardrobe with verified fits across Milan—without spending a single euro.
           </p>
 
-          <div className="flex gap-3 items-center flex-wrap mt-8">
-            <a
-              href="#explore"
-              className="inline-flex items-center justify-center bg-[var(--fuchsia)] text-white border border-[var(--fuchsia)] rounded-full px-6 py-3.5 text-[11px] font-bold tracking-[0.12em] uppercase transition hover:bg-[var(--deep)] hover:-translate-y-0.5"
-            >
-              Swap fits now
-            </a>
+          <div className="mt-8">
             <button
               onClick={() => setIsListItemOpen(true)}
-              className="inline-flex items-center justify-center bg-transparent text-[var(--fuchsia)] border border-[var(--fuchsia)] rounded-full px-6 py-3.5 text-[11px] font-bold tracking-[0.12em] uppercase transition hover:bg-[var(--fuchsia)] hover:text-white"
+              className="inline-flex items-center justify-center bg-[var(--fuchsia)] text-white border border-[var(--fuchsia)] rounded-full px-8 py-4 text-xs font-bold tracking-[0.12em] uppercase transition hover:bg-[var(--deep)] hover:-translate-y-0.5 shadow-md"
             >
-              List a Piece (+10 cr)
+              Swap fits now
             </button>
           </div>
 
