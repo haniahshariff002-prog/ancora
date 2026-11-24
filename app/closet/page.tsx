@@ -294,15 +294,15 @@ export default function ChiaraClosetPage() {
                         View Piece
                       </button>
 
-                      {/* Chat coordination button */}
-                      <button
-                        type="button"
+                      {/* Inbox swap coordination button */}
+                      <Link
+                        href="/inbox"
                         onClick={() => openChatForSwap(item)}
-                        title="Open swap coordination chat for this item"
+                        title="Open swap coordination in Inbox"
                         className="bg-white hover:bg-[var(--pink)] border border-[#c8d5c4] text-[var(--deep)] px-3 py-2 rounded-full text-xs font-bold transition flex items-center gap-1"
                       >
-                        <span>💬</span>
-                      </button>
+                        <span>📬</span>
+                      </Link>
 
                       {/* Toggle status */}
                       <button

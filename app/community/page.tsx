@@ -207,13 +207,13 @@ export default function CommunityPage() {
                     )}
 
                     {memberItems.length > 0 && (
-                      <button
-                        type="button"
+                      <Link
+                        href="/inbox"
                         onClick={() => openChatForSwap(memberItems[0])}
                         className="bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition shadow-sm flex items-center gap-1.5"
                       >
-                        <span>💬</span> Chat with {member.name.split(' ')[0]}
-                      </button>
+                        <span>📬</span> Message {member.name.split(' ')[0]}
+                      </Link>
                     )}
                   </div>
                 </div>

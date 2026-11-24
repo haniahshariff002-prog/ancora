@@ -39,11 +39,16 @@ export default function Navbar() {
     { label: 'Home', value: 'Household' }
   ];
 
+  const unreadCount = conversations.filter(
+    (c) => (c.claimerId === currentUser.id || c.lenderId === currentUser.id) && c.isUnread
+  ).length;
+
   const navLinks = [
     { href: '/', label: 'Explore', badge: null },
-    { href: '/closet', label: "Chiara's Closet", badge: chiaraListedCount },
+    { href: '/closet', label: `${currentUser.name.split(' ')[0]}'s Closet`, badge: chiaraListedCount },
     { href: '/community', label: 'Community', badge: null },
-    { href: '/coordination', label: 'Interested & Chat', badge: savedItemIds.length }
+    { href: '/coordination', label: 'Saved Fits', badge: savedItemIds.length },
+    { href: '/inbox', label: 'Inbox', badge: unreadCount > 0 ? unreadCount : null }
   ];
 
   return (
@@ -123,20 +128,24 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* Swap Chat Button */}
-            <button
-              onClick={() => setIsChatOpen(true)}
-              className="relative bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5"
-              title="Open Swap Meetup & Courier Chat"
+            {/* Swap Inbox Button (Direct link to Inbox page) */}
+            <Link
+              href="/inbox"
+              className={`relative bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 ${
+                pathname === '/inbox' ? 'ring-2 ring-[var(--fuchsia)] bg-[#f5e9e9]' : ''
+              }`}
+              title="Open Swap Messages & Handoff Inbox"
             >
-              <span>💬</span>
-              <span className="hidden sm:inline text-[11px] uppercase tracking-wider">Chat</span>
-              {conversations.length > 0 && (
+              <svg className="w-3.5 h-3.5 stroke-[var(--fuchsia)] fill-none stroke-2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              <span className="hidden sm:inline text-[11px] uppercase tracking-wider">Inbox</span>
+              {unreadCount > 0 && (
                 <span className="bg-[var(--fuchsia)] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {conversations.length}
+                  {unreadCount}
                 </span>
               )}
-            </button>
+            </Link>
 
             {/* Swap Bag (Cart) Button */}
             <button

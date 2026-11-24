@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useApp } from '../context/AppContext';
 
 export default function ProductModal() {
@@ -162,17 +163,17 @@ export default function ProductModal() {
 
               {!isSwapped ? (
                 <div className="flex gap-2.5">
-                  <button
-                    type="button"
+                  <Link
+                    href="/inbox"
                     onClick={() => {
                       openChatForSwap(selectedItem);
                       setSelectedItem(null);
                     }}
-                    className="bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-4 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-xs whitespace-nowrap"
-                    title="Coordinate meetup or ask about fit"
+                    className="bg-white hover:bg-[#f0f5ed] border border-[#c8d5c4] text-[var(--deep)] px-4 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-xs whitespace-nowrap flex items-center gap-1.5"
+                    title="Coordinate meetup or ask about fit in Inbox"
                   >
-                    💬 Chat
-                  </button>
+                    <span>📬</span> Inbox
+                  </Link>
                   <button
                     type="button"
                     onClick={() => {

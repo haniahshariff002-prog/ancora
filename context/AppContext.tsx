@@ -42,13 +42,24 @@ export interface SwapConversation {
   itemName: string;
   itemImage: string;
   itemCredits: number;
+  itemOriginalPrice?: number;
+  itemResalePrice?: number;
+  itemSellerPrice?: number;
+  itemSize?: string;
+  itemCondition?: string;
+  itemBrand?: string;
   lenderId: string;
   lenderName: string;
   lenderAvatar: string;
   lenderLocation: string;
   claimerId: string;
   claimerName: string;
-  status: 'Coordinating Meetup' | 'Courier Scheduled' | 'Handoff Completed';
+  claimerAvatar?: string;
+  status: 'Active' | 'Unread' | 'Coordinating Meetup' | 'Courier Scheduled' | 'Handoff Completed' | 'Declined';
+  isUnread?: boolean;
+  isShortlisted?: boolean;
+  isArchived?: boolean;
+  lastUpdated?: string;
   messages: ChatMessage[];
 }
 
@@ -82,6 +93,9 @@ interface AppContextType {
   setActiveConversation: (conv: SwapConversation | null) => void;
   toggleSaveItem: (itemId: string) => void;
   isItemSaved: (itemId: string) => boolean;
+  toggleShortlistConversation: (convId: string) => void;
+  toggleArchiveConversation: (convId: string) => void;
+  markConversationRead: (convId: string) => void;
   openChatForSwap: (item: FashionItem, swapId?: string) => void;
   sendChatMessage: (conversationId: string, text: string) => void;
   addToBag: (item: FashionItem) => { success: boolean; message: string };
@@ -145,22 +159,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   ]);
   const [reviews] = useState<Record<string, UserReview[]>>(SEEDED_REVIEWS);
 
-  // Chat Conversations State
+  // Chat Conversations State - seeded with realistic Milanese fashion exchange threads
   const [conversations, setConversations] = useState<SwapConversation[]>([
     {
       id: 'conv-swap-901',
       swapId: 'swap-901',
-      itemId: SEEDED_ITEMS[0].id,
-      itemName: SEEDED_ITEMS[0].name,
-      itemImage: SEEDED_ITEMS[0].img,
-      itemCredits: SEEDED_ITEMS[0].credits,
+      itemId: 'w-1',
+      itemName: 'The Oversized Wool Blazer',
+      itemImage: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 45,
+      itemOriginalPrice: 150,
+      itemResalePrice: 70,
+      itemSellerPrice: 55,
+      itemSize: 'M',
+      itemCondition: 'Like new',
+      itemBrand: 'Max Mara Studio',
       lenderId: 'user-matteo',
       lenderName: 'Matteo Rossi',
       lenderAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
-      lenderLocation: 'Navigli, Milan',
+      lenderLocation: 'Via Brera 12, Milan',
       claimerId: 'user-chiara',
       claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
       status: 'Coordinating Meetup',
+      isUnread: true,
+      isShortlisted: true,
+      isArchived: false,
+      lastUpdated: 'Today, 18:40',
       messages: [
         {
           id: 'm-1',
@@ -175,8 +200,204 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           senderId: 'user-matteo',
           senderName: 'Matteo Rossi',
           senderAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
-          timestamp: 'Yesterday, 18:40',
+          timestamp: 'Today, 18:40',
           text: 'Ciao Chiara! Yes, absolutely. I work near Brera until 17:30 tomorrow. We can meet outside the cafe or I can drop it in the InPost locker if you are in a rush!'
+        }
+      ]
+    },
+    {
+      id: 'conv-swap-902',
+      swapId: 'swap-902',
+      itemId: 'w-3',
+      itemName: 'Pleated Palazzo Trousers',
+      itemImage: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 38,
+      itemOriginalPrice: 120,
+      itemResalePrice: 60,
+      itemSellerPrice: 45,
+      itemSize: 'IT 40',
+      itemCondition: 'Like new',
+      itemBrand: 'COS Archive',
+      lenderId: 'user-sofia',
+      lenderName: 'Sofia Vismara',
+      lenderAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Via Isola Garibaldi 4, Milan',
+      claimerId: 'user-chiara',
+      claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      status: 'Courier Scheduled',
+      isUnread: true,
+      isShortlisted: false,
+      isArchived: false,
+      lastUpdated: 'Yesterday, 14:15',
+      messages: [
+        {
+          id: 'm-3',
+          senderId: 'user-chiara',
+          senderName: 'Chiara Moretti',
+          senderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+          timestamp: '2 days ago',
+          text: 'Ciao Sofia! Sent 38 credits for the palazzo trousers. Would an InPost locker work?'
+        },
+        {
+          id: 'm-4',
+          senderId: 'user-sofia',
+          senderName: 'Sofia Vismara',
+          senderAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80',
+          timestamp: 'Yesterday, 14:15',
+          text: 'The locker PIN for InPost #412 at Garibaldi has been generated! You can pick it up anytime within 48 hours.'
+        }
+      ]
+    },
+    {
+      id: 'conv-swap-903',
+      swapId: 'swap-903',
+      itemId: 'w-2',
+      itemName: 'Silk Bias Slip Dress',
+      itemImage: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 42,
+      itemOriginalPrice: 130,
+      itemResalePrice: 65,
+      itemSellerPrice: 50,
+      itemSize: 'S',
+      itemCondition: 'Mint condition',
+      itemBrand: 'Sandro Paris',
+      lenderId: 'user-alessandro',
+      lenderName: 'Alessandro',
+      lenderAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Via Felice Casati, Milan',
+      claimerId: 'user-chiara',
+      claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      status: 'Declined',
+      isUnread: true,
+      isShortlisted: false,
+      isArchived: false,
+      lastUpdated: '06 Nov 2026',
+      messages: [
+        {
+          id: 'm-5',
+          senderId: 'user-alessandro',
+          senderName: 'Alessandro',
+          senderAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80',
+          timestamp: '06 Nov 2026',
+          text: 'Ancora System: This piece was claimed by another Milan member right before. Our advice? Check other available fits or save it to your wishlist!'
+        }
+      ]
+    },
+    {
+      id: 'conv-swap-904',
+      swapId: 'swap-904',
+      itemId: 'm-6',
+      itemName: 'Vintage Leather Flight Bomber',
+      itemImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 65,
+      itemOriginalPrice: 220,
+      itemResalePrice: 110,
+      itemSellerPrice: 80,
+      itemSize: 'L',
+      itemCondition: 'Vintage',
+      itemBrand: 'Avirex Vintage',
+      lenderId: 'user-marco',
+      lenderName: 'Marco Bellini',
+      lenderAvatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Via Privata San Martiniano, Milan',
+      claimerId: 'user-chiara',
+      claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      status: 'Active',
+      isUnread: false,
+      isShortlisted: true,
+      isArchived: false,
+      lastUpdated: '05 Nov 2026',
+      messages: [
+        {
+          id: 'm-6',
+          senderId: 'user-marco',
+          senderName: 'Marco Bellini',
+          senderAvatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&auto=format&fit=crop&q=80',
+          timestamp: '05 Nov 2026',
+          text: 'Good morning! Thank you for your message and interest. The leather is thoroughly conditioned and ready for handoff in Navigli.'
+        }
+      ]
+    },
+    {
+      id: 'conv-swap-905',
+      swapId: 'swap-905',
+      itemId: 'w-5',
+      itemName: 'Double-Breasted Trench Coat',
+      itemImage: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 55,
+      itemOriginalPrice: 190,
+      itemResalePrice: 90,
+      itemSellerPrice: 70,
+      itemSize: 'M',
+      itemCondition: 'Vintage',
+      itemBrand: 'Burberry Archive',
+      lenderId: 'user-chiara',
+      lenderName: 'Chiara Moretti',
+      lenderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Brera, Milan',
+      claimerId: 'user-giulia',
+      claimerName: 'Giulia De Luca',
+      claimerAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80',
+      status: 'Handoff Completed',
+      isUnread: false,
+      isShortlisted: false,
+      isArchived: false,
+      lastUpdated: '02 Nov 2026',
+      messages: [
+        {
+          id: 'm-7',
+          senderId: 'user-giulia',
+          senderName: 'Giulia De Luca',
+          senderAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80',
+          timestamp: '02 Nov 2026',
+          text: 'The coat is incredible! Fits like a dream. Thank you so much Chiara!'
+        },
+        {
+          id: 'm-8',
+          senderId: 'user-chiara',
+          senderName: 'Chiara Moretti',
+          senderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+          timestamp: '02 Nov 2026',
+          text: 'So happy it found a wonderful second life with you in Milan! Enjoy!'
+        }
+      ]
+    },
+    {
+      id: 'conv-swap-906',
+      swapId: 'swap-906',
+      itemId: 'w-4',
+      itemName: 'Chunky Cashmere Mockneck',
+      itemImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
+      itemCredits: 48,
+      itemOriginalPrice: 160,
+      itemResalePrice: 80,
+      itemSellerPrice: 60,
+      itemSize: 'L',
+      itemCondition: 'Gently loved',
+      itemBrand: 'Loro Piana Vintage',
+      lenderId: 'user-nina',
+      lenderName: 'Nina',
+      lenderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Via Privata San Martiniano, Milan',
+      claimerId: 'user-chiara',
+      claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      status: 'Declined',
+      isUnread: false,
+      isShortlisted: false,
+      isArchived: true,
+      lastUpdated: '01 Nov 2026',
+      messages: [
+        {
+          id: 'm-9',
+          senderId: 'user-nina',
+          senderName: 'Nina',
+          senderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+          timestamp: '01 Nov 2026',
+          text: 'Good morning Hasnayn, thank you for your message and interest! Unfortunately the piece has already been reserved for another swapper.'
         }
       ]
     }
@@ -570,6 +791,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     persistState(updatedItems, users, updatedBag, swaps, creditHistory, conversations);
   };
 
+  const toggleShortlistConversation = (convId: string) => {
+    const updated = conversations.map((c) =>
+      c.id === convId ? { ...c, isShortlisted: !c.isShortlisted } : c
+    );
+    setConversations(updated);
+    if (activeConversation?.id === convId) {
+      setActiveConversation({ ...activeConversation, isShortlisted: !activeConversation.isShortlisted });
+    }
+    persistState(items, users, bag, swaps, creditHistory, updated);
+  };
+
+  const toggleArchiveConversation = (convId: string) => {
+    const updated = conversations.map((c) =>
+      c.id === convId ? { ...c, isArchived: !c.isArchived } : c
+    );
+    setConversations(updated);
+    if (activeConversation?.id === convId) {
+      setActiveConversation({ ...activeConversation, isArchived: !activeConversation.isArchived });
+    }
+    persistState(items, users, bag, swaps, creditHistory, updated);
+  };
+
+  const markConversationRead = (convId: string) => {
+    const updated = conversations.map((c) =>
+      c.id === convId ? { ...c, isUnread: false } : c
+    );
+    setConversations(updated);
+    if (activeConversation?.id === convId) {
+      setActiveConversation({ ...activeConversation, isUnread: false });
+    }
+    persistState(items, users, bag, swaps, creditHistory, updated);
+  };
+
   const adminUpdateSwapStatus = (swapId: string, status: SwapOrder['status']) => {
     const updatedSwaps = swaps.map((s) => (s.id === swapId ? { ...s, status } : s));
     setSwaps(updatedSwaps);
@@ -608,6 +862,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setActiveConversation,
         toggleSaveItem,
         isItemSaved,
+        toggleShortlistConversation,
+        toggleArchiveConversation,
+        markConversationRead,
         openChatForSwap,
         sendChatMessage,
         addToBag,

@@ -246,13 +246,13 @@ export default function CoordinationPage() {
                       {/* Action Bar */}
                       <div className="p-4 bg-white border-t border-[#c8d5c4]/60 flex items-center gap-2">
                         {/* Main Chat Coordination Action */}
-                        <button
-                          type="button"
+                        <Link
+                          href="/inbox"
                           onClick={() => openChatForSwap(item)}
                           className="flex-1 bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white text-xs font-bold uppercase tracking-wider py-2.5 px-3 rounded-full transition shadow-xs flex items-center justify-center gap-1.5"
                         >
-                          <span>💬</span> Coordinate Chat
-                        </button>
+                          <span>📬</span> Coordinate in Inbox
+                        </Link>
 
                         {/* Add to Swap Bag */}
                         {!isSwapped && (
@@ -307,13 +307,13 @@ export default function CoordinationPage() {
                   const lastMessage = conv.messages[conv.messages.length - 1];
 
                   return (
-                    <div
+                    <Link
                       key={conv.id}
+                      href="/inbox"
                       onClick={() => {
                         setActiveConversation(conv);
-                        setIsChatOpen(true);
                       }}
-                      className="bg-white rounded-2xl border border-[#c8d5c4] p-5 shadow-sm hover:shadow-md hover:border-[var(--fuchsia)] cursor-pointer transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                      className="bg-white rounded-2xl border border-[#c8d5c4] p-5 shadow-sm hover:shadow-md hover:border-[var(--fuchsia)] cursor-pointer transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 block"
                     >
                       <div className="flex items-center gap-4 min-w-0">
                         {/* Lender Avatar & Piece Thumbnail */}
@@ -356,14 +356,11 @@ export default function CoordinationPage() {
                         <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
                           {conv.status}
                         </span>
-                        <button
-                          type="button"
-                          className="bg-[var(--fuchsia)] text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full hover:bg-[var(--deep)] transition"
-                        >
-                          Open Chat 💬
-                        </button>
+                        <span className="bg-[var(--fuchsia)] text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full hover:bg-[var(--deep)] transition flex items-center gap-1">
+                          Open in Inbox 📬
+                        </span>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>
