@@ -21,7 +21,7 @@ export default function Hero() {
           </h1>
 
           <p className="max-w-[420px] text-sm md:text-base leading-[1.75] text-[var(--ink)] font-normal">
-            Your rent is expensive enough. Your style doesn&apos;t have to be. Turn unworn closet favorites into credits for verified luxury and contemporary fits across Italy.
+            Unlock the real value hanging in your closet. Exchange unworn pieces for credits, and refresh your wardrobe with verified fits across Italy—without spending a single euro.
           </p>
 
           <div className="flex gap-3 items-center flex-wrap mt-8">
