@@ -22,16 +22,68 @@
 </style>
 </head>
 <body id="top">
-<div class="announcement">Your next favorite fit is already out there. ♡</div>
+<div class="announcement">
+  <span>Your next favorite fit is already out there. ♡</span>
+  <a href="#inbox" style="margin-left:14px;color:#fff;text-decoration:underline;font-weight:700;">📬 Open Inbox &amp; Track P2P Orders (3 new) →</a>
+</div>
 <header class="site-header">
 <div class="header-main"><a href="#top" class="logo" aria-label="Ancora home">ancora<span>.</span></a>
 <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><label for="search" style="position:absolute;left:-9999px">Search fashion items</label><input id="search" type="search" placeholder="Search for your next favorite fit..." autocomplete="off"></div>
-<div class="header-actions"><a href="#how-it-works">How it works</a><a href="#explore" class="button">Swap fits now</a></div></div>
+<div class="header-actions">
+  <a href="#inbox" class="button" style="background:#fff;color:var(--fuchsia);border:1px solid #c8d5c4;">📬 Inbox (3)</a>
+  <a href="#how-it-works">How it works</a>
+  <a href="#explore" class="button">Swap fits now</a>
+</div></div>
 <nav class="nav-cats" aria-label="Shop categories" id="filters"><button type="button" data-cat="All" aria-pressed="true">Discover all</button><button type="button" data-cat="Women" aria-pressed="false">Women</button><button type="button" data-cat="Men" aria-pressed="false">Men</button><button type="button" data-cat="Children" aria-pressed="false">Kids</button><button type="button" data-cat="Accessories" aria-pressed="false">Accessories</button><button type="button" data-cat="Books" aria-pressed="false">Books</button><button type="button" data-cat="Household" aria-pressed="false">Home</button></nav>
 </header>
 <main>
-<section class="hero"><div class="hero-grid"><div><div class="eyebrow">Milan-born style exchange · coming soon</div><h1>Wear. Swap.<br><em>Repeat.</em></h1><p class="hero-copy">Exchange unworn pieces for credits, and refresh your wardrobe with verified fits across Milan—without spending a single euro.</p><div class="hero-buttons"><a href="#explore" class="button">Swap fits now</a></div></div><div><div class="hero-images"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&auto=format&fit=crop&q=85" alt="Fashion model wearing a chic contemporary street style outfit" fetchpriority="high"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&auto=format&fit=crop&q=85" alt="Model wearing a stylish editorial outfit"></div><div class="photo-caption">Good clothes deserve another story.</div></div></div></section>
-<div class="ticker"><span>✳ Your closet has currency</span><span>♡ New fits, same bank balance</span><span>✳ Swap, don't shop</span></div>
+<section class="hero"><div class="hero-grid"><div><div class="eyebrow">Milan-born style exchange · live beta</div><h1>Wear. Swap.<br><em>Repeat.</em></h1><p class="hero-copy">Exchange unworn pieces for credits, and refresh your wardrobe with verified fits across Milan—without spending a single euro.</p><div class="hero-buttons"><a href="#explore" class="button">Swap fits now</a><a href="#inbox" class="button" style="background:#fff;color:var(--deep);border:1px solid #c8d5c4;">📬 Open Swap Inbox</a></div></div><div><div class="hero-images"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&auto=format&fit=crop&q=85" alt="Fashion model wearing a chic contemporary street style outfit" fetchpriority="high"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&auto=format&fit=crop&q=85" alt="Model wearing a stylish editorial outfit"></div><div class="photo-caption">Good clothes deserve another story.</div></div></div></section>
+<div class="ticker"><span>✳ Your closet has currency</span><span>♡ New fits, same bank balance</span><span>✳ Swap, don't shop</span><span>📬 P2P Lifecycle: Requested ➔ Approved ➔ Dispatched ➔ Shipped ➔ Delivered ➔ Loved ♡</span></div>
+
+<!-- Dedicated Inbox & P2P Order Tracker Section (Matching HousingAnywhere layout) -->
+<section class="section" id="inbox" style="background:#f4f7f2;border-radius:24px;margin-top:40px;padding:45px 4%;">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;">
+    <div>
+      <div class="eyebrow" style="color:var(--fuchsia);">Peer-to-peer exchange hub</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,5vw,56px);margin:4px 0;color:var(--fuchsia);">Messages &amp; Swap Orders</h2>
+      <p style="font-size:12px;color:var(--ink);margin:0;">Active customer actor: <strong id="active-actor-name">Chiara Moretti</strong> · Milan-wide handoffs, InPost lockers, and order lifecycle transitions.</p>
+    </div>
+    <div style="background:#fff;padding:10px 18px;border-radius:100px;border:1px solid #c8d5c4;display:flex;align-items:center;gap:15px;font-size:12px;">
+      <div><span style="color:var(--ink);font-size:10px;text-transform:uppercase;font-weight:700;display:block;">Credit Balance</span><strong style="color:var(--deep);font-size:15px;">385 CR</strong></div>
+      <div style="width:1px;height:24px;background:#c8d5c4;"></div>
+      <div><span style="color:var(--ink);font-size:10px;text-transform:uppercase;font-weight:700;display:block;">In Escrow</span><strong style="color:#b45309;font-size:15px;">45 CR (Pending)</strong></div>
+      <div style="width:1px;height:24px;background:#c8d5c4;"></div>
+      <div><span style="color:var(--ink);font-size:10px;text-transform:uppercase;font-weight:700;display:block;">Formula</span><span style="font-weight:600;font-size:11px;color:var(--deep);">35% + 45% + 10%</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:240px 1fr 1.1fr;gap:20px;align-items:start;" id="inbox-container">
+    <!-- Left Sidebar Folders -->
+    <div style="background:#fff;border-radius:18px;border:1px solid #c8d5c4;padding:12px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--ink);padding:6px 12px 10px;letter-spacing:.08em;">Folders</div>
+      <div style="display:flex;flex-direction:column;gap:3px;" id="folder-list">
+        <button type="button" class="inbox-folder-btn active" data-folder="active" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:#eaf1e7;border-radius:12px;font-size:12px;font-weight:700;color:var(--deep);text-align:left;"><span>✉ Active</span><span style="color:#666;">5</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="unread" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>✉ Unread</span><span style="background:#000;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;">3</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="coordinating" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>⏳ Requested / Approved</span><span style="color:#666;">2</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="courier" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>📦 Dispatched / Shipped</span><span style="color:#666;">2</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="completed" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>💖 Delivered &amp; Loved</span><span style="color:#666;">2</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="shortlisted" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>☆ Shortlisted</span><span style="color:#666;">2</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="declined" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>🚫 Declined</span><span style="color:#666;">1</span></button>
+        <button type="button" class="inbox-folder-btn" data-folder="archived" style="display:flex;justify-content:space-between;padding:10px 14px;border:0;background:transparent;border-radius:12px;font-size:12px;font-weight:600;color:var(--ink);text-align:left;"><span>🗄 Archived</span><span style="color:#666;">1</span></button>
+      </div>
+    </div>
+
+    <!-- Middle Conversation Thread Cards (HousingAnywhere design) -->
+    <div style="display:flex;flex-direction:column;gap:12px;" id="inbox-threads-list">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- Right Detailed Stepper & Interactive Chat -->
+    <div style="background:#fff;border-radius:18px;border:1px solid #c8d5c4;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.03);" id="inbox-thread-detail">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+</section>
 <section class="section" id="explore"><div class="section-head"><div><div class="eyebrow">The wardrobe edit</div><h2 class="section-title">Find your next <em>obsession.</em></h2></div><p class="section-note">A little taste of the looks we love. Sample pieces shown for inspiration while the community gets ready.</p></div><div class="collection" id="collection" aria-live="polite"></div><p id="empty" class="empty" hidden>Nothing matches your search yet. Try another style or category.</p><p class="credit-disclaimer">*Estimated credit valuation based on piece category and condition. 1 credit = 1 swap unit within the Ancora network.</p></section>
 <section class="editorial" id="how-it-works"><div class="editorial-grid"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1100&auto=format&fit=crop&q=85" alt="Fashionable friends browsing clothing together" loading="lazy"><div><div class="eyebrow">Fashion, with a second life</div><h2>Out with the old.<br><em>In with the you.</em></h2><p>Your unworn clothes could be someone else's favorite. Exchange pieces, collect credits and refresh your wardrobe without refreshing your spending habits.</p><div class="steps"><div class="step"><b>01</b><h3>List it.</h3><p>Give your unworn pieces a new chance.</p></div><div class="step"><b>02</b><h3>Earn it.</h3><p>Get credits when your pieces find a home.</p></div><div class="step"><b>03</b><h3>Love it.</h3><p>Use credits to discover your next fit.</p></div></div></div></div></section>
 <section class="signup" id="signup"><div class="eyebrow">A new way to get dressed</div><h2>New fits.<br><em>Same bank balance.</em></h2><p>Be first in the closet when Ancora launches.</p><form id="waitlist-form" novalidate><label for="email" style="position:absolute;left:-9999px">Email address</label><input id="email" name="email" type="email" required autocomplete="email" placeholder="Your email address"><button class="button" type="submit">Get early access</button></form><p id="form-msg" class="form-msg" role="status" aria-live="polite"></p><p class="privacy-note">No spam. Only early closet invites. Unsubscribe anytime.</p></section>
@@ -84,5 +136,324 @@ form.addEventListener('submit',async e=>{
     msg.textContent='Connection error. Please try again.';
   }
 });
+
+// Interactive P2P Swap Orders & Inbox System
+const ORDER_STAGES = ['Requested', 'Approved', 'Dispatched', 'Shipped', 'Delivered', 'Loved'];
+let activeInboxFolder = 'active';
+let selectedThreadId = 't-1';
+
+const INBOX_THREADS = [
+  {
+    id: 't-1',
+    participant: 'Matteo Rossi',
+    role: 'Swapper',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
+    item: 'The Oversized Wool Blazer',
+    img: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800&auto=format&fit=crop&q=80',
+    credits: 45,
+    retail: 150,
+    resale: 70,
+    ask: 55,
+    location: 'Via Brera 12, Milan',
+    status: 'Coordinating Meetup',
+    orderStatus: 'Approved',
+    unread: true,
+    shortlisted: true,
+    archived: false,
+    timestamp: 'Today, 18:40',
+    messages: [
+      { sender: 'Chiara Moretti', text: 'Ciao Matteo! I just claimed the oversized blazer using my swap credits. Are you free for an in-person handoff near Piazza del Carmine in Brera?' },
+      { sender: 'Matteo Rossi', text: 'Ciao Chiara! Yes, absolutely. I work near Brera until 17:30 tomorrow. We can meet outside the cafe or I can drop it in the InPost locker if you are in a rush!' }
+    ]
+  },
+  {
+    id: 't-2',
+    participant: 'Sofia Vismara',
+    role: 'Swapper',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80',
+    item: 'Pleated Palazzo Trousers',
+    img: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&auto=format&fit=crop&q=80',
+    credits: 38,
+    retail: 120,
+    resale: 60,
+    ask: 45,
+    location: 'Via Isola Garibaldi 4, Milan',
+    status: 'Courier Scheduled',
+    orderStatus: 'Dispatched',
+    unread: true,
+    shortlisted: false,
+    archived: false,
+    timestamp: 'Yesterday, 14:15',
+    messages: [
+      { sender: 'Chiara Moretti', text: 'Ciao Sofia! Sent 38 credits for the palazzo trousers. Would an InPost locker work?' },
+      { sender: 'Sofia Vismara', text: 'The locker PIN for InPost #412 at Garibaldi has been generated! You can pick it up anytime within 48 hours.' }
+    ]
+  },
+  {
+    id: 't-3',
+    participant: 'Alessandro',
+    role: 'Swapper',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80',
+    item: 'Silk Bias Slip Dress',
+    img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&auto=format&fit=crop&q=80',
+    credits: 42,
+    retail: 130,
+    resale: 65,
+    ask: 50,
+    location: 'Via Felice Casati, Milan',
+    status: 'Declined',
+    orderStatus: 'Requested',
+    unread: true,
+    shortlisted: false,
+    archived: false,
+    timestamp: '06 Nov 2026',
+    messages: [
+      { sender: 'Ancora System', text: 'This place is no longer available for your swap. Our advice? Check other available fits or save it to your wishlist!' }
+    ]
+  },
+  {
+    id: 't-4',
+    participant: 'Marco Bellini',
+    role: 'Swapper',
+    avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&auto=format&fit=crop&q=80',
+    item: 'Vintage Leather Flight Bomber',
+    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80',
+    credits: 65,
+    retail: 220,
+    resale: 110,
+    ask: 80,
+    location: 'Via Privata San Martiniano, Milan',
+    status: 'Active',
+    orderStatus: 'Shipped',
+    unread: false,
+    shortlisted: true,
+    archived: false,
+    timestamp: '05 Nov 2026',
+    messages: [
+      { sender: 'Marco Bellini', text: 'Good morning! Thank you for your message and interest. The leather is thoroughly conditioned and in transit to the Navigli hub.' }
+    ]
+  },
+  {
+    id: 't-5',
+    participant: 'Giulia De Luca',
+    role: 'Swapee',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80',
+    item: 'Double-Breasted Trench Coat',
+    img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop&q=80',
+    credits: 55,
+    retail: 190,
+    resale: 90,
+    ask: 70,
+    location: 'Brera, Milan',
+    status: 'Handoff Completed',
+    orderStatus: 'Delivered',
+    unread: false,
+    shortlisted: false,
+    archived: false,
+    timestamp: '02 Nov 2026',
+    messages: [
+      { sender: 'Giulia De Luca', text: 'The coat has been delivered! Trying it on this evening.' }
+    ]
+  },
+  {
+    id: 't-6',
+    participant: 'Nina',
+    role: 'Swapper',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+    item: 'Chunky Cashmere Mockneck',
+    img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
+    credits: 48,
+    retail: 160,
+    resale: 80,
+    ask: 60,
+    location: 'Corso Buenos Aires, Milan',
+    status: 'Handoff Completed',
+    orderStatus: 'Loved',
+    unread: false,
+    shortlisted: false,
+    archived: true,
+    timestamp: '01 Nov 2026',
+    messages: [
+      { sender: 'Chiara Moretti', text: 'I tried it on and I am in love! Released your 48 credits.' }
+    ]
+  }
+];
+
+function renderInbox() {
+  const listEl = document.getElementById('inbox-threads-list');
+  const detailEl = document.getElementById('inbox-thread-detail');
+  if (!listEl || !detailEl) return;
+
+  // Filter threads
+  const filtered = INBOX_THREADS.filter(t => {
+    if (activeInboxFolder === 'archived') return t.archived;
+    if (t.archived) return false;
+    if (activeInboxFolder === 'active') return t.status !== 'Declined';
+    if (activeInboxFolder === 'unread') return t.unread;
+    if (activeInboxFolder === 'coordinating') return t.orderStatus === 'Requested' || t.orderStatus === 'Approved';
+    if (activeInboxFolder === 'courier') return t.orderStatus === 'Dispatched' || t.orderStatus === 'Shipped';
+    if (activeInboxFolder === 'completed') return t.orderStatus === 'Delivered' || t.orderStatus === 'Loved';
+    if (activeInboxFolder === 'shortlisted') return t.shortlisted;
+    if (activeInboxFolder === 'declined') return t.status === 'Declined';
+    return true;
+  });
+
+  listEl.innerHTML = filtered.map(t => {
+    const isSelected = t.id === selectedThreadId;
+    const isDeclined = t.status === 'Declined';
+    const statusColor = isDeclined ? '#c22d4b' : t.orderStatus === 'Loved' ? '#e11d48' : '#059669';
+    return `
+      <div onclick="selectThread('${t.id}')" style="background:#fff;border-radius:16px;border:1px solid ${isSelected ? 'var(--fuchsia)' : '#c8d5c4'};padding:14px;cursor:pointer;box-shadow:${isSelected ? '0 0 0 2px rgba(156,49,95,0.2)' : 'none'};">
+        <div style="display:flex;gap:12px;align-items:start;">
+          <img src="${t.avatar}" alt="${t.participant}" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid #c8d5c4;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:11px;font-weight:700;color:${statusColor};text-transform:uppercase;">${isDeclined ? 'Declined' : 'Stage: ' + t.orderStatus}</span>
+              <div style="font-size:11px;color:#666;">
+                <span>${t.shortlisted ? '★ Shortlisted' : '☆ Shortlist'}</span> · <span>Archive</span>
+              </div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#111;margin-top:2px;">${t.participant}</div>
+            <div style="font-size:11px;color:#666;">${t.location} · ${t.timestamp}</div>
+            <div style="margin-top:8px;background:#f5e9e9;padding:6px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;">
+              <img src="${t.img}" style="width:28px;height:28px;border-radius:4px;object-fit:cover;">
+              <span style="font-size:11px;font-weight:700;color:var(--deep);">${t.item} (${t.credits} CR)</span>
+            </div>
+            <div style="font-size:12px;color:#444;margin-top:6px;line-height:1.4;">${t.messages[t.messages.length - 1].text}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('') || '<div style="background:#fff;border-radius:16px;padding:30px;text-align:center;color:#666;font-size:12px;">No conversations in this folder.</div>';
+
+  const current = INBOX_THREADS.find(t => t.id === selectedThreadId) || filtered[0] || INBOX_THREADS[0];
+  const currentStepIdx = ORDER_STAGES.indexOf(current.orderStatus);
+
+  // Render detail panel with interactive 6-step lifecycle
+  detailEl.innerHTML = `
+    <div style="background:#f7faf5;border-bottom:1px solid #c8d5c4;padding:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:.1em;color:var(--fuchsia);">Peer-to-Peer Order Stepper</span>
+        <span style="font-size:11px;font-weight:700;background:#fff;padding:2px 8px;border-radius:12px;border:1px solid #c8d5c4;">${current.item} · ${current.credits} CR</span>
+      </div>
+
+      <!-- 6-Stage Visual Stepper -->
+      <div style="display:grid;grid-template-columns:repeat(6, 1fr);gap:4px;margin:14px 0;text-align:center;">
+        ${ORDER_STAGES.map((st, i) => {
+          const isDone = i < currentStepIdx;
+          const isCurr = i === currentStepIdx;
+          return `
+            <div>
+              <div style="width:28px;height:28px;border-radius:50%;margin:auto;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:${isCurr ? 'var(--fuchsia)' : isDone ? '#059669' : '#e5e7eb'};color:${isCurr || isDone ? '#fff' : '#6b7280'};">
+                ${isDone ? '✓' : i + 1}
+              </div>
+              <div style="font-size:9px;font-weight:700;margin-top:4px;color:${isCurr ? 'var(--fuchsia)' : isDone ? '#059669' : '#6b7280'};">${st}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <!-- Contextual Action Buttons -->
+      <div style="background:#fff;padding:12px;border-radius:12px;border:1px solid #c8d5c4;margin-top:10px;">
+        <div style="font-size:11px;color:var(--ink);margin-bottom:8px;">Current State: <strong style="color:var(--deep);">${current.orderStatus}</strong></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${current.orderStatus === 'Requested' ? `
+            <button onclick="advanceStage('${current.id}', 'Approved')" style="flex:1;background:var(--fuchsia);color:#fff;border:0;padding:9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">✓ Swapper: Accept &amp; Approve Swap Request</button>
+          ` : current.orderStatus === 'Approved' ? `
+            <button onclick="advanceStage('${current.id}', 'Dispatched')" style="flex:1;background:#4338ca;color:#fff;border:0;padding:9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">📦 Swapper: Pack &amp; Mark Dispatched</button>
+          ` : current.orderStatus === 'Dispatched' ? `
+            <button onclick="advanceStage('${current.id}', 'Shipped')" style="flex:1;background:#1d4ed8;color:#fff;border:0;padding:9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">🚚 Swapper/Courier: Drop in Locker (Mark Shipped)</button>
+          ` : current.orderStatus === 'Shipped' ? `
+            <button onclick="advanceStage('${current.id}', 'Delivered')" style="flex:1;background:#059669;color:#fff;border:0;padding:9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">📬 Swapee: Confirm Delivery from InPost Locker</button>
+          ` : current.orderStatus === 'Delivered' ? `
+            <button onclick="advanceStage('${current.id}', 'Loved')" style="flex:1;background:#e11d48;color:#fff;border:0;padding:9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">💖 Swapee: Fit Received &amp; Loved! (Release ${current.credits} CR)</button>
+          ` : `
+            <div style="width:100%;text-align:center;color:#e11d48;font-weight:700;font-size:12px;padding:6px;background:#ffe4e6;border-radius:8px;">🎉 Swap Completed &amp; Loved! ${current.credits} CR credited to Swapper.</div>
+          `}
+        </div>
+
+        <!-- Jump to any step -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid #eee;font-size:10px;color:#777;">
+          <span>Jump to step:</span>
+          <div>
+            ${ORDER_STAGES.map(s => `<button onclick="advanceStage('${current.id}', '${s}')" style="margin-left:3px;padding:2px 6px;border-radius:4px;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;font-size:9px;">${s.split(' ')[0]}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Valuation Breakdown & Chat History -->
+    <div style="padding:14px;background:#f0f5ed;border-bottom:1px solid #c8d5c4;font-size:11px;">
+      <div style="display:flex;justify-content:space-between;color:var(--deep);font-weight:700;margin-bottom:6px;">
+        <span>35/45/10 Valuation Index:</span>
+        <span style="color:var(--fuchsia);">${current.credits} CR</span>
+      </div>
+      <div style="background:#fff;padding:8px;border-radius:8px;display:flex;justify-content:space-between;text-align:center;font-size:10px;color:var(--ink);">
+        <div>Retail €${current.retail} (35%)</div><div>+</div><div>Resale €${current.resale} (45%)</div><div>+</div><div>Ask €${current.ask} (10%)</div><div>=</div><div style="font-weight:700;color:var(--fuchsia);">${current.credits} CR</div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div style="padding:14px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:#fff;" id="chat-stream">
+      ${current.messages.map(m => `
+        <div style="background:#f4f7f2;padding:8px 12px;border-radius:12px;font-size:12px;color:#222;max-width:85%;">
+          <strong style="font-size:10px;color:var(--deep);display:block;">${m.sender}</strong>
+          ${m.text}
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Input -->
+    <div style="padding:10px;border-top:1px solid #c8d5c4;background:#fff;display:flex;gap:8px;">
+      <input type="text" id="chat-input" placeholder="Message ${current.participant}..." style="flex:1;padding:8px 14px;border-radius:20px;border:1px solid #c8d5c4;font-size:12px;outline:none;">
+      <button onclick="sendInboxMsg('${current.id}')" style="background:var(--fuchsia);color:#fff;border:0;border-radius:20px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;">Send</button>
+    </div>
+  `;
+}
+
+function selectThread(id) {
+  selectedThreadId = id;
+  renderInbox();
+}
+
+function advanceStage(id, nextStage) {
+  const t = INBOX_THREADS.find(x => x.id === id);
+  if (!t) return;
+  t.orderStatus = nextStage;
+  t.messages.push({
+    sender: 'Ancora Exchange',
+    text: `⚡ P2P Lifecycle Updated: Order advanced to "${nextStage}".`
+  });
+  renderInbox();
+}
+
+function sendInboxMsg(id) {
+  const inp = document.getElementById('chat-input');
+  if (!inp || !inp.value.trim()) return;
+  const t = INBOX_THREADS.find(x => x.id === id);
+  if (!t) return;
+  t.messages.push({ sender: 'Chiara Moretti', text: inp.value.trim() });
+  inp.value = '';
+  renderInbox();
+}
+
+// Folder buttons
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.inbox-folder-btn');
+  if (btn) {
+    document.querySelectorAll('.inbox-folder-btn').forEach(b => {
+      b.style.background = 'transparent';
+      b.style.color = 'var(--ink)';
+      b.style.fontWeight = '600';
+    });
+    btn.style.background = '#eaf1e7';
+    btn.style.color = 'var(--deep)';
+    btn.style.fontWeight = '700';
+    activeInboxFolder = btn.getAttribute('data-folder');
+    renderInbox();
+  }
+});
+
+renderInbox();
 </script>
 </body></html>

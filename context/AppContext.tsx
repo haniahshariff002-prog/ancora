@@ -4,17 +4,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { FashionItem, SEEDED_ITEMS } from '../data/items';
 import { UserProfile, UserReview, SEEDED_USERS, SEEDED_REVIEWS } from '../data/users';
 
+export type P2POrderStatus = 'Requested' | 'Approved' | 'Dispatched' | 'Shipped' | 'Delivered' | 'Loved';
+
 export interface SwapOrder {
   id: string;
   items: FashionItem[];
   totalCredits: number;
   date: string;
-  status: 'Requested' | 'Approved' | 'Dispatched' | 'Delivered' | 'Completed';
+  status: P2POrderStatus;
   userId: string;
   userName: string;
   userEmail: string;
   deliveryAddress: string;
   trackingNumber?: string;
+  lenderId?: string;
+  lenderName?: string;
 }
 
 export interface CreditTransaction {
@@ -56,6 +60,7 @@ export interface SwapConversation {
   claimerName: string;
   claimerAvatar?: string;
   status: 'Active' | 'Unread' | 'Coordinating Meetup' | 'Courier Scheduled' | 'Handoff Completed' | 'Declined';
+  orderStatus: P2POrderStatus;
   isUnread?: boolean;
   isShortlisted?: boolean;
   isArchived?: boolean;
@@ -96,6 +101,7 @@ interface AppContextType {
   toggleShortlistConversation: (convId: string) => void;
   toggleArchiveConversation: (convId: string) => void;
   markConversationRead: (convId: string) => void;
+  advanceP2PStatus: (convId: string, nextStatus: P2POrderStatus, note?: string) => void;
   openChatForSwap: (item: FashionItem, swapId?: string) => void;
   sendChatMessage: (conversationId: string, text: string) => void;
   addToBag: (item: FashionItem) => { success: boolean; message: string };
@@ -182,6 +188,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       claimerName: 'Chiara Moretti',
       claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
       status: 'Coordinating Meetup',
+      orderStatus: 'Approved',
       isUnread: true,
       isShortlisted: true,
       isArchived: false,
@@ -226,6 +233,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       claimerName: 'Chiara Moretti',
       claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
       status: 'Courier Scheduled',
+      orderStatus: 'Dispatched',
       isUnread: true,
       isShortlisted: false,
       isArchived: false,
@@ -270,6 +278,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       claimerName: 'Chiara Moretti',
       claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
       status: 'Declined',
+      orderStatus: 'Requested',
       isUnread: true,
       isShortlisted: false,
       isArchived: false,
@@ -306,6 +315,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       claimerName: 'Chiara Moretti',
       claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
       status: 'Active',
+      orderStatus: 'Shipped',
       isUnread: false,
       isShortlisted: true,
       isArchived: false,
@@ -342,6 +352,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       claimerName: 'Giulia De Luca',
       claimerAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80',
       status: 'Handoff Completed',
+      orderStatus: 'Delivered',
       isUnread: false,
       isShortlisted: false,
       isArchived: false,
@@ -372,6 +383,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       itemName: 'Chunky Cashmere Mockneck',
       itemImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
       itemCredits: 48,
+      itemOriginalPrice: 160,
+      itemResalePrice: 80,
+      itemSellerPrice: 60,
+      itemSize: 'L',
+      itemCondition: 'Gently loved',
+      itemBrand: 'Loro Piana Vintage',
+      lenderId: 'user-nina',
+      lenderName: 'Nina',
+      lenderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      lenderLocation: 'Via Privata San Martiniano, Milan',
+      claimerId: 'user-chiara',
+      claimerName: 'Chiara Moretti',
+      claimerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      status: 'Declined',
+      orderStatus: 'Loved',
       itemOriginalPrice: 160,
       itemResalePrice: 80,
       itemSellerPrice: 60,
@@ -507,6 +533,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         claimerId: currentUser.id,
         claimerName: currentUser.name,
         status: 'Coordinating Meetup',
+        orderStatus: 'Requested',
         messages: [
           {
             id: `msg-${Date.now()}-intro`,
@@ -667,6 +694,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         claimerId: currentUser.id,
         claimerName: currentUser.name,
         status: 'Coordinating Meetup',
+        orderStatus: 'Requested',
         messages: [
           {
             id: `msg-${Date.now()}-initial`,
@@ -824,6 +852,69 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     persistState(items, users, bag, swaps, creditHistory, updated);
   };
 
+  const advanceP2PStatus = (
+    convId: string,
+    nextStatus: P2POrderStatus,
+    note?: string
+  ) => {
+    const targetConv = conversations.find((c) => c.id === convId);
+    if (!targetConv) return;
+
+    let sysText = '';
+    if (nextStatus === 'Approved') {
+      sysText = `✨ Swap Approved: Swapper ${targetConv.lenderName} accepted the swap request! Packaging the piece for dispatch.`;
+    } else if (nextStatus === 'Dispatched') {
+      sysText = `📦 Dispatched: Swapper has dispatched the piece! Locker/Courier handoff registered.`;
+    } else if (nextStatus === 'Shipped') {
+      sysText = `🚚 Shipped: Garment is in transit across Milan via courier / InPost locker.`;
+    } else if (nextStatus === 'Delivered') {
+      sysText = `📬 Delivered: Garment arrived at delivery point! Ready for Swapee to collect & try on.`;
+    } else if (nextStatus === 'Loved') {
+      sysText = `💖 Loved & Swapped! Swapee ${targetConv.claimerName} confirmed the piece fits amazingly. ${targetConv.itemCredits} CR released to ${targetConv.lenderName}!`;
+    }
+
+    const systemMsg: ChatMessage = {
+      id: `msg-sys-${Date.now()}`,
+      senderId: 'system',
+      senderName: 'Ancora Exchange',
+      senderAvatar: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=300&auto=format&fit=crop&q=80',
+      timestamp: 'Just now',
+      text: note ? `${sysText} Note: "${note}"` : sysText
+    };
+
+    const updatedConv: SwapConversation = {
+      ...targetConv,
+      orderStatus: nextStatus,
+      status: nextStatus === 'Loved' ? 'Handoff Completed' : targetConv.status,
+      lastUpdated: 'Just now',
+      messages: [...targetConv.messages, systemMsg]
+    };
+
+    const updatedConvs = conversations.map((c) => (c.id === convId ? updatedConv : c));
+    setConversations(updatedConvs);
+    if (activeConversation?.id === convId) {
+      setActiveConversation(updatedConv);
+    }
+
+    // If Loved, reward lender with credits
+    if (nextStatus === 'Loved') {
+      const lender = users.find((u) => u.id === targetConv.lenderId);
+      if (lender) {
+        const updatedUsers = users.map((u) =>
+          u.id === targetConv.lenderId
+            ? { ...u, credits: u.credits + targetConv.itemCredits, swapsCompleted: u.swapsCompleted + 1 }
+            : u
+        );
+        setUsers(updatedUsers);
+        if (currentUser.id === targetConv.lenderId) {
+          setCurrentUser({ ...currentUser, credits: currentUser.credits + targetConv.itemCredits });
+        }
+      }
+    }
+
+    persistState(items, users, bag, swaps, creditHistory, updatedConvs);
+  };
+
   const adminUpdateSwapStatus = (swapId: string, status: SwapOrder['status']) => {
     const updatedSwaps = swaps.map((s) => (s.id === swapId ? { ...s, status } : s));
     setSwaps(updatedSwaps);
@@ -865,6 +956,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         toggleShortlistConversation,
         toggleArchiveConversation,
         markConversationRead,
+        advanceP2PStatus,
         openChatForSwap,
         sendChatMessage,
         addToBag,

@@ -56,7 +56,15 @@ export default function Navbar() {
       {/* Top Announcement Bar */}
       <div className="bg-[var(--fuchsia)] text-white text-center py-2 px-4 text-[11px] tracking-[0.14em] uppercase font-medium flex justify-between items-center">
         <span className="hidden md:inline text-[10px] tracking-widest text-[#f5e9e9]/80">MILAN-BORN FASHION EXCHANGE</span>
-        <span className="mx-auto">Your next favorite fit is already out there. ♡</span>
+        <div className="flex items-center gap-3 mx-auto flex-wrap justify-center">
+          <span>Your next favorite fit is already out there. ♡</span>
+          <Link
+            href="/inbox"
+            className="underline font-bold text-white hover:text-[#f5e9e9] transition"
+          >
+            📬 Open Inbox &amp; Track P2P Orders ({unreadCount} new) →
+          </Link>
+        </div>
         <button
           onClick={() => setIsAdminOpen(!isAdminOpen)}
           className="text-[10px] tracking-wider uppercase underline hover:text-[#f5e9e9] transition-colors"

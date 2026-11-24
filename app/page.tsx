@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useApp } from '../context/AppContext';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -39,6 +40,27 @@ export default function Home() {
 
       {/* Hero Section */}
       <Hero />
+
+      {/* P2P Order Protocol & Direct Inbox Link */}
+      <div className="bg-white border-y border-[#c8d5c4] py-3.5 px-[5%] shadow-xs">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="font-bold text-[var(--deep)] uppercase tracking-wider text-[11px]">
+              P2P Exchange Protocol:
+            </span>
+            <span className="text-[var(--ink)] font-medium">
+              Requested ➔ Approved ➔ Dispatched ➔ Shipped ➔ Delivered ➔ Loved ♡
+            </span>
+          </div>
+          <Link
+            href="/inbox"
+            className="bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white font-bold text-xs uppercase tracking-wider px-5 py-2 rounded-full transition shadow-xs flex items-center gap-2 shrink-0"
+          >
+            <span>📬</span> Go to Inbox &amp; Track Swaps →
+          </Link>
+        </div>
+      </div>
 
       {/* Marquee Ticker */}
       <div className="bg-[var(--pink)] py-3 px-4 text-center text-xs tracking-[0.16em] uppercase flex justify-center gap-6 md:gap-10 flex-wrap text-[var(--fuchsia)] font-medium border-y border-[#c8d5c4]/50">
