@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function ListItemModal() {
@@ -12,7 +12,13 @@ export default function ListItemModal() {
   const [brand, setBrand] = useState('');
   const [size, setSize] = useState('M');
   const [condition, setCondition] = useState('Like new');
-  const [credits, setCredits] = useState(40);
+
+  // Valuation model inputs (€1 = 1 CR breakdown: 35% Retail + 45% Resale + 10% Proposed)
+  const [retailPrice, setRetailPrice] = useState<number>(120);
+  const [resalePrice, setResalePrice] = useState<number>(55);
+  const [sellerPrice, setSellerPrice] = useState<number>(45);
+  const [credits, setCredits] = useState<number>(42);
+
   const [img, setImg] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -20,6 +26,15 @@ export default function ListItemModal() {
   const [submitted, setSubmitted] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-calculate credits using the 35% / 45% / 10% valuation breakdown
+  useEffect(() => {
+    const retailWeight = (retailPrice || 0) * 0.35;
+    const resaleWeight = (resalePrice || 0) * 0.45;
+    const sellerWeight = (sellerPrice || 0) * 0.10;
+    const calculatedCredits = Math.max(5, Math.round(retailWeight + resaleWeight + sellerWeight));
+    setCredits(calculatedCredits);
+  }, [retailPrice, resalePrice, sellerPrice]);
 
   if (!isListItemOpen) return null;
 
@@ -34,7 +49,6 @@ export default function ListItemModal() {
     reader.onload = (e) => {
       const result = e.target?.result as string;
 
-      // Create an image element to compress/standardize dimensions
       const image = new Image();
       image.onload = () => {
         const canvas = document.createElement('canvas');
@@ -46,7 +60,6 @@ export default function ListItemModal() {
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-          // Export high-quality jpeg data URL
           const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
           setImg(compressedDataUrl);
         } else {
@@ -100,7 +113,7 @@ export default function ListItemModal() {
       size,
       condition,
       credits: Number(credits) || 35,
-      description: `${brand || 'Contemporary'} ${name} in ${condition.toLowerCase()}. Size ${size}. Cleaned and ready for swap.`,
+      description: `${brand || 'Contemporary'} ${name} in ${condition.toLowerCase()}. Size ${size}. Cleaned and ready for swap. Valued via Ancora 35/45/10 index.`,
       img: finalImage
     });
 
@@ -114,13 +127,17 @@ export default function ListItemModal() {
     }, 1800);
   };
 
+  const retailVal = ((retailPrice || 0) * 0.35).toFixed(1);
+  const resaleVal = ((resalePrice || 0) * 0.45).toFixed(1);
+  const sellerVal = ((sellerPrice || 0) * 0.10).toFixed(1);
+
   return (
     <div
       className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
       onClick={() => setIsListItemOpen(false)}
     >
       <div
-        className="relative bg-[var(--sage)] w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-[#c8d5c4] my-6 p-6 md:p-8"
+        className="relative bg-[var(--sage)] w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-[#c8d5c4] my-6 p-6 md:p-8 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -290,8 +307,8 @@ export default function ListItemModal() {
                 </div>
               </div>
 
-              {/* Size, Condition, Credits */}
-              <div className="grid grid-cols-3 gap-3">
+              {/* Size & Condition */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
                     Size
@@ -320,24 +337,89 @@ export default function ListItemModal() {
                     <option value="Vintage">Vintage archive</option>
                   </select>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block font-bold text-[var(--deep)] uppercase tracking-wider text-[10px] mb-1">
-                    Credit Value (cr)
-                  </label>
-                  <input
-                    type="number"
-                    min="10"
-                    max="100"
-                    value={credits}
-                    onChange={(e) => setCredits(Number(e.target.value))}
-                    className="w-full bg-white border border-[#c8d5c4] rounded-lg px-3 py-2 text-xs text-[var(--deep)] outline-none font-bold text-[var(--fuchsia)]"
-                  />
+              {/* Credit Valuation Formula Engine (€1 = 1 CR: 35% Retail + 45% Resale + 10% Proposed) */}
+              <div className="bg-white/80 p-4 rounded-xl border border-[#c8d5c4] space-y-3">
+                <div className="flex justify-between items-baseline">
+                  <span className="font-bold text-[var(--deep)] uppercase tracking-wider text-[10px]">
+                    Credit Valuation Index (€1 = 1 CR)
+                  </span>
+                  <span className="text-[10px] text-gray-500 font-mono">35% / 45% / 10% Breakdown</span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2.5">
+                  <div>
+                    <label className="block text-[9px] uppercase font-bold tracking-wider text-[var(--ink)] mb-1">
+                      1. Retail Price (€)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={retailPrice}
+                      onChange={(e) => setRetailPrice(Number(e.target.value))}
+                      placeholder="120"
+                      className="w-full bg-[#f0f5ed] border border-[#c8d5c4] rounded-lg p-2 text-xs text-[var(--deep)] font-bold outline-none"
+                    />
+                    <span className="text-[9px] text-gray-500 block mt-0.5">Weight: 35%</span>
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] uppercase font-bold tracking-wider text-[var(--ink)] mb-1">
+                      2. Resale Market (€)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={resalePrice}
+                      onChange={(e) => setResalePrice(Number(e.target.value))}
+                      placeholder="55"
+                      className="w-full bg-[#f0f5ed] border border-[#c8d5c4] rounded-lg p-2 text-xs text-[var(--deep)] font-bold outline-none"
+                    />
+                    <span className="text-[9px] text-gray-500 block mt-0.5">Weight: 45%</span>
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] uppercase font-bold tracking-wider text-[var(--ink)] mb-1">
+                      3. Your Ask (€)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={sellerPrice}
+                      onChange={(e) => setSellerPrice(Number(e.target.value))}
+                      placeholder="45"
+                      className="w-full bg-[#f0f5ed] border border-[#c8d5c4] rounded-lg p-2 text-xs text-[var(--deep)] font-bold outline-none"
+                    />
+                    <span className="text-[9px] text-gray-500 block mt-0.5">Weight: 10%</span>
+                  </div>
+                </div>
+
+                {/* Live Allotment Result Card */}
+                <div className="bg-[#f5e9e9] p-3 rounded-lg border border-[#c8d5c4] flex justify-between items-center text-xs">
+                  <div>
+                    <div className="text-[10px] text-[var(--ink)] font-mono space-x-2">
+                      <span>Retail: +{retailVal} cr</span>
+                      <span>·</span>
+                      <span>Resale: +{resaleVal} cr</span>
+                      <span>·</span>
+                      <span>Ask: +{sellerVal} cr</span>
+                    </div>
+                    <span className="text-[10px] text-[var(--deep)] font-medium block mt-0.5">
+                      Fair market credit proposal
+                    </span>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="font-serif text-2xl font-bold text-[var(--fuchsia)]">
+                      {credits} <span className="text-xs font-sans text-[var(--deep)]">credits</span>
+                    </span>
+                  </div>
                 </div>
               </div>
 
               {/* Submit CTA */}
-              <div className="pt-2">
+              <div className="pt-1">
                 <button
                   type="submit"
                   className="w-full bg-[var(--fuchsia)] hover:bg-[var(--deep)] text-white py-3.5 rounded-full font-bold uppercase tracking-widest text-xs transition shadow-md"

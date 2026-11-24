@@ -24,10 +24,14 @@ Instantly test the application from any perspective using the actor switcher in 
 - **Ancora Admin Studio (`@ancora_hq`):** Operations lead with full administrative access.
 
 ### 3. Swap Bag & Credit Engine
+- **Algorithmic Credit Valuation Model:** Allotted credits are calculated using a 3-tier fair market index (€1 = 1 CR):
+  - **35%** Original Retail Price
+  - **45%** Resale Market Value
+  - **10%** Seller Proposed Ask
 - **Asynchronous Credit Flow:** Solves the 1-to-1 barter dilemma. Users earn credits when their garments find a home and spend credits to claim new fits.
 - **Live Credit Ledger:** Tracks every transaction (earned rewards, listing bonuses, spent claims).
 - **Interactive Bag Drawer:** Real-time credit deduction, delivery/locker input, and order confirmation.
-- **"List a Piece" Wardrobe Studio:** Multi-step upload form granting **+10 provisional credits** immediately upon submission.
+- **"List a Piece" Wardrobe Studio:** Client-side photo processing and live valuation calculation granting **+10 provisional credits** immediately upon submission.
 
 ### 4. Admin Management Dashboard (`/admin` or via top bar)
 - **KPI Metrics:** Total inventory, active listings, circulating credits, active swaps, completed claims.
